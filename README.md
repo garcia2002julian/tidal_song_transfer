@@ -6,6 +6,7 @@ Next you have to get your spotify csv backup to use with my code using this link
 this is the following code that worked great enough for me
 
 Make sure to read the comments to understand what is going on or if you want to change something yourself. The application is simple enough.
+The only thing you will have to change is the 'YOUR PATH' with your path you want to read the csv file from and store the log files.
 
 This is the image of the github link I posted in case it ever goes away:
 
