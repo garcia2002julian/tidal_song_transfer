@@ -6,3 +6,5 @@ Next you have to get your spotify csv backup to use with my code using this link
 this is the following code that worked great enough for me
 
 Make sure to read the comments to understand what is going on or if you want to change something yourself. The application is simple enough.
+
+![image](https://github.com/user-attachments/assets/6f9c28e0-fa8d-4883-b74f-f02492d2bae4)
