@@ -15,7 +15,7 @@ def search_tidal_song(song_name, artist_name):
     song_name = re.sub(r'\s*\(.*?\)', '', song_name) #removes any parenthesis and words within because more accurate search on tidal
     query = song_name + " " + artist_name
     query_length = len(song_name)
-    results = session1.search(query=query, limit=5,) #searches tidal with the query and gets top 5 results
+    results = session1.search(query=query, models=[tidalapi.media.Track], limit=5,) #searches tidal with the query and gets top 5 results
     if len(results['tracks']) > 0:
         # Get the first result as the closest match
         min_length = 1000
