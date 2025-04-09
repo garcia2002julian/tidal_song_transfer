@@ -76,9 +76,9 @@ ids = []
 with open(r'YOUR PATH\songs.csv', newline='\n', encoding='utf-8') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='"')
     for row in reader:
-        spotify_id = row[0]
-        song_name = row[1]
-        artist_name = row[2]
+        # spotify_id = row[0]
+        song_name = row[0]
+        artist_name = row[1]
         
         # print(f"Searching for: {song_name} by {artist_name}")
         tidal_song_id = search_tidal_song(song_name, artist_name)
