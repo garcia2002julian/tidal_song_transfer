@@ -3,12 +3,10 @@ import os
 import csv
 import re
 
-# PATHS
-lib = r'{YOUR_PATH}\My Spotify Library.csv'
-log_found = r'{YOUR_PATH}\pylogs\log_found.txt'
-log_diff = r'{YOUR_PATH}\pylogs\log_diff.txt'
-log_not_found = r'{YOUR_PATH}\pylogs\log_not_found.csv'
-log_exception = r'{YOUR_PATH}\pylogs\log_exception.txt'
+# TuneMyMusic Spotify->CSV file path
+lib = r'{YOUR_CSV_PATH}\My Spotify Library.csv'
+# desired log path
+log_path = 'YOUR_LOG_PATH'
 
 session = tidalapi.Session()
 print('Enter your credentials for the account you want to transfer from')
@@ -16,7 +14,7 @@ session.login_oauth_simple()
 
 
 def search_tidal_song(song_name, artist_name):
-    song_name = re.sub(r'\s*\(.*?\)', '', song_name) #removes any parenthesis and words within because more accurate search on tidal
+    song_name = re.sub(r'\s*\(.*?\)', '', song_name) # removes any parenthesis and words within because more accurate search on tidal
     query = song_name + " " + artist_name
     query_length = len(song_name)
     results = session.search(query=query, models=[tidalapi.media.Track], limit=5,) #searches tidal with the query and gets top 5 results
@@ -30,18 +28,18 @@ def search_tidal_song(song_name, artist_name):
                 min_index = i
                 break
             
-            #this section here I added because I kept getting remixes of songs when song was not a remix and vice versa
+            # this section here I added because I kept getting remixes of songs when song was not a remix and vice versa
             song_remix = song_name.lower().find('remix')
             result_remix = results['tracks'][i].name.lower().find('remix')
             requirement_met = False
             if (song_remix == -1 and result_remix == -1) or (song_remix != -1 and result_remix != -1):
                 requirement_met = True
 
-            #if the song name is even in the result (note you can remove that part of the if statement if you're not getting adequate results and see if you get better)
+            # if the song name is even in the result (note you can remove that part of the if statement if you're not getting adequate results and see if you get better)
             if results['tracks'][i].name.find(song_name) != -1 and requirement_met:
                 length_track = len(results['tracks'][i].name)
                 diff = abs(query_length - length_track)
-                #gets the least difference in length of the song name
+                # gets the least difference in length of the song name
                 if diff < min_length:
                     min_index = i
                     min_length = diff
@@ -53,22 +51,20 @@ def search_tidal_song(song_name, artist_name):
 
                 
         track = results['tracks'][min_index]
-        #look at log.txt for the tidal song found and if song not found
-        #look at log2.txt for song differences in names and artists
-        with open(log_found, 'a', encoding='utf-8') as f:
+        with open(r"{log_path}\pylogs\log_found.txt", 'a', encoding='utf-8') as f:
             f.write(f"Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}")
             f.write('\n')
         if song_name != track.name:
-            with open(log_diff, 'a', encoding='utf-8') as f:
+            with open(r"{log_path}\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
                 f.write(f"NAME:      Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}, ||||||| Spotify: {song_name}, {artist_name}")
                 f.write('\n')
         elif artist_name != track.artist.name:
-            with open(log_diff, 'a', encoding='utf-8') as f:
+            with open(r"{log_path}\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
                 f.write(f"ARTIST:      Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}, |||||| Spotify: {song_name}, {artist_name}")
                 f.write('\n')
         return track.id
-    else: #did not find song based on query
-        with open(log_not_found, 'a', encoding='utf-8') as f:
+    else: # did not find song based on query
+        with open(r"{log_path}\pylogs\log_not_found.csv", 'a', encoding='utf-8') as f:
             f.write(f'"{song_name}","{artist_name}"')
             f.write('\n')
         print(f"No results found for {song_name} by {artist_name}")
@@ -114,10 +110,11 @@ try:
         for batch_ids in batch(playlist_hash[playlist_name], 1000):
             playlist.add(batch_ids)
 except Exception as e:
-    with open(log_exception, 'a', encoding='utf-8') as f:
+    with open(r"{log_path}\pylogs\log_exception.txt", 'a', encoding='utf-8') as f:
         f.write(f"An error occurred while adding: {e}")
         f.write('\n')
     print(f"An error occurred while adding: {e}")
 
 
 os.system("pause")
+
