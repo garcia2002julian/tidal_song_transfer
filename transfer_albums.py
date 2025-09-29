@@ -4,9 +4,9 @@ import csv
 import re
 
 # TuneMyMusic Spotify->CSV file path
-lib = r'{YOUR_CSV_PATH}\My Spotify Library.csv'
+lib = r'YOUR\CSV\PATH\My Spotify Library.csv'
 # desired log path
-log_path = 'YOUR_LOG_PATH'
+log_path = r'YOUR\LOG\PATH'
 
 session = tidalapi.Session()
 print('Enter your credentials for the account you want to transfer from')
@@ -51,20 +51,20 @@ def search_tidal_song(song_name, artist_name):
 
                 
         track = results['tracks'][min_index]
-        with open(r"{log_path}\pylogs\log_found.txt", 'a', encoding='utf-8') as f:
+        with open(log_path + r"\pylogs\log_found.txt", 'a', encoding='utf-8') as f:
             f.write(f"Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}")
             f.write('\n')
         if song_name != track.name:
-            with open(r"{log_path}\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
+            with open(log_path + r"\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
                 f.write(f"NAME:      Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}, ||||||| Spotify: {song_name}, {artist_name}")
                 f.write('\n')
         elif artist_name != track.artist.name:
-            with open(r"{log_path}\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
+            with open(log_path + r"\pylogs\log_diff.txt", 'a', encoding='utf-8') as f:
                 f.write(f"ARTIST:      Tidal Song ID: {track.id}, Name: {track.name}, Artist: {track.artist.name}, |||||| Spotify: {song_name}, {artist_name}")
                 f.write('\n')
         return track.id
     else: # did not find song based on query
-        with open(r"{log_path}\pylogs\log_not_found.csv", 'a', encoding='utf-8') as f:
+        with open(log_path + r"\pylogs\log_not_found.csv", 'a', encoding='utf-8') as f:
             f.write(f'"{song_name}","{artist_name}"')
             f.write('\n')
         print(f"No results found for {song_name} by {artist_name}")
@@ -110,7 +110,7 @@ try:
         for batch_ids in batch(playlist_hash[playlist_name], 1000):
             playlist.add(batch_ids)
 except Exception as e:
-    with open(r"{log_path}\pylogs\log_exception.txt", 'a', encoding='utf-8') as f:
+    with open(log_path + r"\pylogs\log_exception.txt", 'a', encoding='utf-8') as f:
         f.write(f"An error occurred while adding: {e}")
         f.write('\n')
     print(f"An error occurred while adding: {e}")
