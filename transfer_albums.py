@@ -59,7 +59,7 @@ def transfer_songs(csv_filepath):
     # 1. Read CSV and group songs by playlist
     spotify_playlists = {}
     print(f"Reading and grouping songs from {os.path.basename(csv_filepath)}...")
-    with open(csv_filepath, newline='', encoding='utf-8') as csvfile:
+    with open(csv_filepath, newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.reader(csvfile)
         header = next(reader) # Skip header
         try:
@@ -149,4 +149,5 @@ if __name__ == "__main__":
                 print("Invalid input. Please enter a number.")
 
     input("\nPress Enter to exit...")
+
 
